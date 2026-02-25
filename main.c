@@ -1,11 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "sorts.h"
+
+/* Comparación manual de strings */
+int str_igual(const char *a, const char *b)
+{
+    while (*a && *b) {
+        if (*a != *b)
+            return 0;
+        a++;
+        b++;
+    }
+
+    /* ambas deben terminar al mismo tiempo */
+    return (*a == '\0' && *b == '\0');
+}
 
 void print_lista(int *arr, int n)
 {
-    for (int i = 0; i < n; i++)
+    int i;
+    for (i = 0; i < n; i++)
         printf("%d ", arr[i]);
 
     printf("\n");
@@ -15,7 +29,10 @@ int comp_int(const void *a, const void *b)
 {
     int x = *(const int*)a;
     int y = *(const int*)b;
-    return (x > y) - (x < y);   // forma segura sin overflow
+
+    if (x > y) return 1;
+    if (x < y) return -1;
+    return 0;
 }
 
 int main(int argc, char **argv)
@@ -25,22 +42,20 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    char *tipo = argv[1];
-
     int a[] = {10, 5, 9, 4, 1};
     int n = sizeof(a) / sizeof(a[0]);
 
-    if (strcmp(tipo, "insert") == 0)
+    if (str_igual(argv[1], "insert"))
         insert_sort(a, n, sizeof(int), comp_int);
 
-    else if (strcmp(tipo, "select") == 0)
+    else if (str_igual(argv[1], "select"))
         select_sort(a, n, sizeof(int), comp_int);
 
-    else if (strcmp(tipo, "bubble") == 0)
+    else if (str_igual(argv[1], "bubble"))
         bubble_sort(a, n, sizeof(int), comp_int);
 
     else {
-        printf("Algoritmo no válido.\n");
+        printf("Algoritmo no valido.\n");
         return 1;
     }
 
